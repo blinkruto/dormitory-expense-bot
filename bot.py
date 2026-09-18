@@ -342,7 +342,7 @@ async def users_handler(message: Message):
 
     await message.answer(text)
 
-@router.message(Command("clearall"))
+@dp.message(Command("clearall"))
 async def clear_all_handler(message: Message):
     args = message.text.split()
 
