@@ -20,7 +20,7 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command
 from dotenv import load_dotenv
-
+from database import clear_all_expense_data
 
 load_dotenv()
 
@@ -341,6 +341,26 @@ async def users_handler(message: Message):
         text += f"• {username}\n"
 
     await message.answer(text)
+
+@router.message(Command("clearall"))
+async def clear_all_handler(message: Message):
+    args = message.text.split()
+
+    if len(args) < 2 or args[1].lower() != "confirm":
+        await message.answer(
+            "⚠️ Будут удалены ВСЕ текущие и архивные траты.\n"
+            "Пользователи останутся.\n\n"
+            "Для подтверждения отправь:\n"
+            "/clearall confirm"
+        )
+        return
+
+    clear_all_expense_data()
+
+    await message.answer(
+        "🗑 Все текущие и архивные траты удалены.\n"
+        "👤 Пользователи сохранены."
+    )
 
 if __name__ == "__main__":
     asyncio.run(main())

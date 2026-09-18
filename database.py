@@ -219,3 +219,15 @@ def get_archive():
     conn.close()
 
     return rows
+
+def clear_all_expense_data():
+    conn = libsql.connect(
+        database=os.environ["TURSO_DATABASE_URL"],
+        auth_token=os.environ["TURSO_AUTH_TOKEN"]
+    )
+
+    conn.execute("DELETE FROM expenses")
+    conn.execute("DELETE FROM archive_expenses")
+
+    conn.commit()
+    conn.close()
